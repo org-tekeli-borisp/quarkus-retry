@@ -17,6 +17,7 @@
         <quarkus.platform.version>3.21.2</quarkus.platform.version>
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.5.2</surefire-plugin.version>
+        <assertj-core.version>3.27.2</assertj-core.version>
     </properties>
 
     <dependencyManagement>
@@ -83,7 +84,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.27.2</version>
+            <version>${assertj-core.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
