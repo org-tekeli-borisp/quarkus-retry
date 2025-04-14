@@ -1,11 +1,18 @@
 package org.tekeli.borisp
 
 import io.quarkus.logging.Log
-import jakarta.enterprise.context.ApplicationScoped
+import jakarta.enterprise.context.Dependent
+import jakarta.inject.Inject
+import org.apache.kafka.clients.consumer.ConsumerRecord
 
-@ApplicationScoped
-class TemperatureMeasurementKafkaConsumer {
-    fun consume(record: Any) {
-        Log.info("Consuming record: $record")
+@Dependent
+class TemperatureMeasurementKafkaConsumer() {
+
+    @Inject
+    lateinit var temperatureMeasurementService: TemperatureMeasurementService
+
+    fun consume(consumerRecord: ConsumerRecord<String, TemperatureMeasurement>) {
+        Log.info("Consuming record: $consumerRecord")
+        temperatureMeasurementService.save(consumerRecord.value())
     }
 }
