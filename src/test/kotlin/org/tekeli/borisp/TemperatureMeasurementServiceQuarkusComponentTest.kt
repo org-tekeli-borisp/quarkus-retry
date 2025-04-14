@@ -15,15 +15,15 @@ class TemperatureMeasurementServiceQuarkusComponentTest {
     fun `saving of one TemperatureMeasurement increases the collection's size by one`() {
         assertThat(temperatureMeasurementService.getAll()).hasSize(0)
 
-        temperatureMeasurementService.save(TemperatureMeasurement())
+        temperatureMeasurementService.save(givenTemperatureMeasurement())
 
         assertThat(temperatureMeasurementService.getAll()).hasSize(1)
     }
 
     @Test
     fun `saving of two different TemperatureMeasurements increases the collection's size by two`() {
-        val temperatureMeasurement1 = TemperatureMeasurement()
-        val temperatureMeasurement2 = TemperatureMeasurement()
+        val temperatureMeasurement1 = givenTemperatureMeasurement()
+        val temperatureMeasurement2 = givenOtherTemperatureMeasurement()
         assertThat(temperatureMeasurementService.getAll()).hasSize(0)
 
         temperatureMeasurementService.save(temperatureMeasurement1)
@@ -34,7 +34,7 @@ class TemperatureMeasurementServiceQuarkusComponentTest {
 
     @Test
     fun `saving should be idempotent`() {
-        val temperatureMeasurement = TemperatureMeasurement()
+        val temperatureMeasurement = givenTemperatureMeasurement()
         assertThat(temperatureMeasurementService.getAll()).hasSize(0)
 
         temperatureMeasurementService.save(temperatureMeasurement)
