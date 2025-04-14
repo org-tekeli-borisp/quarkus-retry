@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.verify
 
 @QuarkusComponentTest
-class TemperatureMeasurementKafkaConsumerTest {
+class TemperatureMeasurementKafkaConsumerQuarkusComponentTest {
 
     @InjectMock
     lateinit var temperatureMeasurementService: TemperatureMeasurementService

@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 @QuarkusComponentTest
-class TemperatureMeasurementServiceTest {
+class TemperatureMeasurementServiceQuarkusComponentTest {
 
     @Inject
     lateinit var temperatureMeasurementService: TemperatureMeasurementService
