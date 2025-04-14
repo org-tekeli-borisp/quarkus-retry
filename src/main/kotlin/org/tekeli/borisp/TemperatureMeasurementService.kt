@@ -6,7 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped
 @ApplicationScoped
 class TemperatureMeasurementService() {
 
-    private val temperatureMeasurements = mutableListOf<TemperatureMeasurement>()
+    private val temperatureMeasurements = mutableSetOf<TemperatureMeasurement>()
 
     fun save(temperatureMeasurement: TemperatureMeasurement) {
         Log.info("Saving temperature measurement $temperatureMeasurement")
@@ -14,6 +14,6 @@ class TemperatureMeasurementService() {
     }
 
     fun getAll(): List<TemperatureMeasurement> {
-        return temperatureMeasurements
+        return temperatureMeasurements.toList()
     }
 }

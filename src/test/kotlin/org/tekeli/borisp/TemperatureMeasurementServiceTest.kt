@@ -33,13 +33,13 @@ class TemperatureMeasurementServiceTest {
     }
 
     @Test
-    fun `two savings of the same TemperatureMeasurement's leads to list size of two`() {
+    fun `saving should be idempotent`() {
         val temperatureMeasurement = TemperatureMeasurement()
         assertThat(temperatureMeasurementService.getAll()).hasSize(0)
 
         temperatureMeasurementService.save(temperatureMeasurement)
         temperatureMeasurementService.save(temperatureMeasurement)
 
-        assertThat(temperatureMeasurementService.getAll()).hasSize(2)
+        assertThat(temperatureMeasurementService.getAll()).hasSize(1)
     }
 }
