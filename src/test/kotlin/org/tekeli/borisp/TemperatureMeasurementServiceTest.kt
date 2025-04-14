@@ -12,7 +12,7 @@ class TemperatureMeasurementServiceTest {
     lateinit var temperatureMeasurementService: TemperatureMeasurementService
 
     @Test
-    fun `first saving of one TemperatureMeasurement leads to list size of one`() {
+    fun `saving of one TemperatureMeasurement increases the collection's size by one`() {
         assertThat(temperatureMeasurementService.getAll()).hasSize(0)
 
         temperatureMeasurementService.save(TemperatureMeasurement())
@@ -21,7 +21,7 @@ class TemperatureMeasurementServiceTest {
     }
 
     @Test
-    fun `two savings of two different TemperatureMeasurement's leads to list size of two`() {
+    fun `saving of two different TemperatureMeasurements increases the collection's size by two`() {
         val temperatureMeasurement1 = TemperatureMeasurement()
         val temperatureMeasurement2 = TemperatureMeasurement()
         assertThat(temperatureMeasurementService.getAll()).hasSize(0)
