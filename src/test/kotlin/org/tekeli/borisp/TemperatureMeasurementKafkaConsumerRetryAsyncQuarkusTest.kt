@@ -15,8 +15,8 @@ import org.mockito.Mockito.doThrow
 import org.mockito.kotlin.anyOrNull
 
 @QuarkusTest
-@TestProfile(RetryTestProfile::class)
-class TemperatureMeasurementKafkaConsumerRetryQuarkusTest {
+@TestProfile(RetryAsyncTestProfile::class)
+class TemperatureMeasurementKafkaConsumerRetryAsyncQuarkusTest {
     @Inject
     @ConfigProperty(name = "kafka.bootstrap.servers")
     lateinit var bootstrapServers: String
@@ -40,15 +40,20 @@ class TemperatureMeasurementKafkaConsumerRetryQuarkusTest {
     }
 
     @Test
-    fun `a TemperatureMeasurement leads to a temporal exception during saving but retrying should remedy`() {
-        val producerRecord = givenProducerRecord(temperatureMeasurementsTopic)
+    fun `Async recovery when first measurement encounters a temporary exception, retry mechanism resolves it while second measurement processes independently`() {
+        val producerRecord =  givenProducerRecord(temperatureMeasurementsTopic, "Hamburg", givenTemperatureMeasurementAsJson())
+        val otherProducerRecord =
+            givenProducerRecord(temperatureMeasurementsTopic, "Kiel", givenOtherTemperatureMeasurementAsJson())
         doThrow(RuntimeException("Boom!!!"))
             .doCallRealMethod()
             .`when`(temperatureMeasurementService).save(anyOrNull())
         assertThat(temperatureMeasurementService.getAll()).hasSize(0)
 
         givenTestKafkaProducer.send(producerRecord)
+        givenTestKafkaProducer.send(otherProducerRecord)
 
-        await().untilAsserted({ assertThat(temperatureMeasurementService.getAll()).hasSize(1) })
+        await().untilAsserted({ assertThat(temperatureMeasurementService.getAll()).hasSize(2) })
+        assertThat(temperatureMeasurementService.getAll().get(0).city).isEqualTo("Kiel")
+        assertThat(temperatureMeasurementService.getAll().get(1).city).isEqualTo("Hamburg")
     }
 }

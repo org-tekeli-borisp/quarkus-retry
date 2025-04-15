@@ -3,6 +3,7 @@ package org.tekeli.borisp
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
+import io.quarkus.test.junit.QuarkusTestProfile
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
@@ -31,6 +32,14 @@ fun givenTemperatureMeasurementAsJson(): String = """
         }
     """.trimIndent()
 
+fun givenOtherTemperatureMeasurementAsJson(): String = """
+        {
+            "city": "Kiel",
+            "temperature": 17.5,
+            "timestamp": "2025-04-15T01:02:03Z"
+        }
+    """.trimIndent()
+
 fun ObjectMapperDeserializer<TemperatureMeasurement>.registerJavaTimeModule() {
     val loadedClass = ObjectMapperDeserializer::class
     val declaredField = loadedClass.java.getDeclaredField("objectMapper")
@@ -49,4 +58,26 @@ fun givenTestKafkaProducer(bootstrapServers: String): KafkaProducer<String, Stri
 }
 
 fun givenProducerRecord(topic: String): ProducerRecord<String, String> =
-    ProducerRecord(topic, null, "Hamburg", givenTemperatureMeasurementAsJson())
+    givenProducerRecord(topic, "Hamburg", givenTemperatureMeasurementAsJson())
+
+fun givenProducerRecord(topic: String, key: String, value: String): ProducerRecord<String, String> =
+    ProducerRecord(topic, null, key, value)
+
+
+// Create a profile for the first test
+class RetryTestProfile : QuarkusTestProfile {
+    override fun getConfigOverrides(): Map<String, String> {
+        return mapOf(
+            "mp.messaging.incoming.temperature-measurements.topic" to "temp-measurements-retry"
+        )
+    }
+}
+
+// Create a profile for the second test
+class RetryAsyncTestProfile : QuarkusTestProfile {
+    override fun getConfigOverrides(): Map<String, String> {
+        return mapOf(
+            "mp.messaging.incoming.temperature-measurements.topic" to "temp-measurements-retry-async"
+        )
+    }
+}
