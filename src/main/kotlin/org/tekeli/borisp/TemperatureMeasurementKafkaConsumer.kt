@@ -1,7 +1,7 @@
 package org.tekeli.borisp
 
 import io.quarkus.logging.Log
-import io.smallrye.reactive.messaging.annotations.Blocking
+import io.smallrye.common.annotation.RunOnVirtualThread
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -16,7 +16,7 @@ open class TemperatureMeasurementKafkaConsumer() {
 
     @Incoming("temperature-measurements")
     @Retry(maxRetries = 3, delay = 1000L, delayUnit = ChronoUnit.MILLIS)
-    @Blocking(ordered = false)
+    @RunOnVirtualThread
     open fun consume(consumerRecord: ConsumerRecord<String, TemperatureMeasurement>) {
         Log.info("Consuming record: $consumerRecord")
         temperatureMeasurementService.save(consumerRecord.value())
