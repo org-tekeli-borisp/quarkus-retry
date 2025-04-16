@@ -20,6 +20,9 @@
         <awaitility.version>4.3.0</awaitility.version>
         <mockito-kotlin.version>5.1.0</mockito-kotlin.version>
         <quarkus-smallrye-reactive-messaging-kafka.version>3.14.4</quarkus-smallrye-reactive-messaging-kafka.version>
+        <pitest-maven.version>1.18.2</pitest-maven.version>
+        <pitest-parent.version>1.18.2</pitest-parent.version>
+        <pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -104,6 +107,12 @@
             <artifactId>mockito-kotlin</artifactId>
             <version>${mockito-kotlin.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-parent</artifactId>
+            <version>${pitest-parent.version}</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
 
@@ -202,6 +211,25 @@
                         <option>all-open:annotation=io.quarkus.test.junit.QuarkusComponentTest</option>
                     </pluginOptions>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>${pitest-maven.version}</version>
+                <configuration>
+                    <mutators>
+                        <mutator>ALL</mutator>
+                    </mutators>
+                    <timeoutFactor>2</timeoutFactor>
+                    <timeoutConstant>10000</timeoutConstant>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>${pitest-junit5-plugin.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
