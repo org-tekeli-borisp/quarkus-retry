@@ -49,5 +49,6 @@ class TemperatureMeasurementKafkaConsumerRetryQuarkusTest {
         givenTestKafkaProducer.send(producerRecord)
 
         await().untilAsserted({ assertThat(temperatureMeasurementService.getAll()).hasSize(1) })
+        assertThat(temperatureMeasurementService.getAll().get(0).city).isEqualTo("Köln")
     }
 }
