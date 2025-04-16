@@ -11,7 +11,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.doThrow
-import org.mockito.kotlin.anyOrNull
+import org.mockito.kotlin.argThat
 
 @QuarkusTest
 class TemperatureMeasurementKafkaConsumerRetryAsyncQuarkusTest {
@@ -45,7 +45,7 @@ class TemperatureMeasurementKafkaConsumerRetryAsyncQuarkusTest {
             givenProducerRecord(temperatureMeasurementsTopic, "München", givenTemperatureMeasurementAsJson("München", 24.9))
         doThrow(RuntimeException("Boom!!!"))
             .doCallRealMethod()
-            .`when`(temperatureMeasurementService).save(anyOrNull())
+            .`when`(temperatureMeasurementService).save(argThat { city == "Berlin" })
         assertThat(temperatureMeasurementService.getAll()).hasSize(0)
 
         givenTestKafkaProducer.send(producerRecord)
