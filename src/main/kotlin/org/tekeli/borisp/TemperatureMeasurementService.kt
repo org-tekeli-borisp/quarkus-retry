@@ -4,7 +4,7 @@ import io.quarkus.logging.Log
 import jakarta.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class TemperatureMeasurementService() {
+open class TemperatureMeasurementService() {
 
     private val temperatureMeasurements = mutableSetOf<TemperatureMeasurement>()
 
@@ -15,5 +15,9 @@ class TemperatureMeasurementService() {
 
     fun getAll(): List<TemperatureMeasurement> {
         return temperatureMeasurements.toList()
+    }
+
+    fun clear() {
+        temperatureMeasurements.clear()
     }
 }
