@@ -17,11 +17,11 @@ class TemperatureMeasurementDeserializerTest {
     @Test
     fun `should deserialize temperatureMeasurement`() {
         val deserializedTemperatureMeasurement =
-            sus.deserialize("topic", givenTemperatureMeasurementAsJson().toByteArray(UTF_8))
+            sus.deserialize("topic", givenTemperatureMeasurementAsJson("Lübeck", 14.1).toByteArray(UTF_8))
 
         assertThat(deserializedTemperatureMeasurement).isNotNull
-        assertThat(deserializedTemperatureMeasurement.city).isEqualTo("Hamburg")
-        assertThat(deserializedTemperatureMeasurement.temperature).isEqualTo(18.7)
+        assertThat(deserializedTemperatureMeasurement.city).isEqualTo("Lübeck")
+        assertThat(deserializedTemperatureMeasurement.temperature).isEqualTo(14.1)
         assertThat(deserializedTemperatureMeasurement.timestamp.toString()).isEqualTo("2025-04-15T01:02:03Z")
     }
 }

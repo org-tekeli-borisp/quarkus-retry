@@ -11,30 +11,18 @@ import org.apache.kafka.common.serialization.StringSerializer
 import java.time.OffsetDateTime
 import java.util.*
 
-fun givenConsumerRecord(): ConsumerRecord<String, TemperatureMeasurement> {
+fun givenConsumerRecord(temperatureMeasurement: TemperatureMeasurement): ConsumerRecord<String, TemperatureMeasurement> {
     val topic = "topic"
-    val temperatureMeasurement = givenTemperatureMeasurement()
     return ConsumerRecord(topic, 0, 0, temperatureMeasurement.city, temperatureMeasurement)
 }
 
-fun givenTemperatureMeasurement(): TemperatureMeasurement =
-    TemperatureMeasurement("Hamburg", 18.7, OffsetDateTime.parse("2025-04-15T01:02:03Z"))
+fun givenTemperatureMeasurement(city: String, temperature: Double): TemperatureMeasurement =
+    TemperatureMeasurement(city, temperature, OffsetDateTime.parse("2025-04-15T01:02:03Z"))
 
-fun givenOtherTemperatureMeasurement(): TemperatureMeasurement =
-    TemperatureMeasurement("Kiel", 17.5, OffsetDateTime.parse("2025-04-15T01:02:03Z"))
-
-fun givenTemperatureMeasurementAsJson(): String = """
+fun givenTemperatureMeasurementAsJson(city: String, temperature: Double): String = """
         {
-            "city": "Hamburg",
-            "temperature": 18.7,
-            "timestamp": "2025-04-15T01:02:03Z"
-        }
-    """.trimIndent()
-
-fun givenOtherTemperatureMeasurementAsJson(): String = """
-        {
-            "city": "Kiel",
-            "temperature": 17.5,
+            "city": "$city",
+            "temperature": $temperature,
             "timestamp": "2025-04-15T01:02:03Z"
         }
     """.trimIndent()
@@ -55,9 +43,6 @@ fun givenTestKafkaProducer(bootstrapServers: String): KafkaProducer<String, Stri
     config[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java.canonicalName
     return KafkaProducer<String, String>(config)
 }
-
-fun givenProducerRecord(topic: String): ProducerRecord<String, String> =
-    givenProducerRecord(topic, "Hamburg", givenTemperatureMeasurementAsJson())
 
 fun givenProducerRecord(topic: String, key: String, value: String): ProducerRecord<String, String> =
     ProducerRecord(topic, null, key, value)

@@ -40,9 +40,9 @@ class TemperatureMeasurementKafkaConsumerRetryAsyncQuarkusTest {
     @Test
     fun `Async recovery when first measurement encounters a temporary exception, retry mechanism resolves it while second measurement processes independently`() {
         val producerRecord =
-            givenProducerRecord(temperatureMeasurementsTopic, "Hamburg", givenTemperatureMeasurementAsJson())
+            givenProducerRecord(temperatureMeasurementsTopic, "Berlin", givenTemperatureMeasurementAsJson("Berlin", 22.3))
         val otherProducerRecord =
-            givenProducerRecord(temperatureMeasurementsTopic, "Kiel", givenOtherTemperatureMeasurementAsJson())
+            givenProducerRecord(temperatureMeasurementsTopic, "München", givenTemperatureMeasurementAsJson("München", 24.9))
         doThrow(RuntimeException("Boom!!!"))
             .doCallRealMethod()
             .`when`(temperatureMeasurementService).save(anyOrNull())
@@ -52,7 +52,7 @@ class TemperatureMeasurementKafkaConsumerRetryAsyncQuarkusTest {
         givenTestKafkaProducer.send(otherProducerRecord)
 
         await().untilAsserted({ assertThat(temperatureMeasurementService.getAll()).hasSize(2) })
-        assertThat(temperatureMeasurementService.getAll().get(0).city).isEqualTo("Kiel")
-        assertThat(temperatureMeasurementService.getAll().get(1).city).isEqualTo("Hamburg")
+        assertThat(temperatureMeasurementService.getAll().get(0).city).isEqualTo("München")
+        assertThat(temperatureMeasurementService.getAll().get(1).city).isEqualTo("Berlin")
     }
 }

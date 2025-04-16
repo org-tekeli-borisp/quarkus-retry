@@ -36,7 +36,8 @@ class TemperatureMeasurementKafkaConsumerQuarkusTest {
 
     @Test
     fun `a new TemperatureMeasurement on kafka topic increases the collection's size by one`() {
-        val producerRecord = givenProducerRecord(temperatureMeasurementsTopic)
+        val producerRecord =
+            givenProducerRecord(temperatureMeasurementsTopic, "Bremen", givenTemperatureMeasurementAsJson("Bremen", 16.8))
         assertThat(temperatureMeasurementService.getAll()).hasSize(0)
 
         givenTestKafkaProducer.send(producerRecord)

@@ -18,14 +18,15 @@ class TemperatureMeasurementKafkaConsumerQuarkusComponentTest {
 
     @Test
     fun `should consume ConsumerRecord`() {
-        val consumerRecord = givenConsumerRecord()
+
+        val consumerRecord = givenConsumerRecord(givenTemperatureMeasurement("Essen", 22.8))
 
         assertThatNoException().isThrownBy { sus.consume(consumerRecord) }
     }
 
     @Test
     fun `should save TemperatureMeasurement`() {
-        val consumerRecord = givenConsumerRecord()
+        val consumerRecord = givenConsumerRecord(givenTemperatureMeasurement("Magdeburg", 20.1))
 
         sus.consume(consumerRecord)
 

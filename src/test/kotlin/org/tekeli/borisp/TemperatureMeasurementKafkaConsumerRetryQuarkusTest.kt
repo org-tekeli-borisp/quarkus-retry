@@ -39,7 +39,8 @@ class TemperatureMeasurementKafkaConsumerRetryQuarkusTest {
 
     @Test
     fun `a TemperatureMeasurement leads to a temporal exception during saving but retrying should remedy`() {
-        val producerRecord = givenProducerRecord(temperatureMeasurementsTopic)
+        val producerRecord =
+            givenProducerRecord(temperatureMeasurementsTopic, "Köln", givenTemperatureMeasurementAsJson("Köln", 18.1))
         doThrow(RuntimeException("Boom!!!"))
             .doCallRealMethod()
             .`when`(temperatureMeasurementService).save(anyOrNull())
