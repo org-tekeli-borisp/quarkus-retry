@@ -3,7 +3,6 @@ package org.tekeli.borisp
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer
-import io.quarkus.test.junit.QuarkusTestProfile
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
@@ -63,21 +62,3 @@ fun givenProducerRecord(topic: String): ProducerRecord<String, String> =
 fun givenProducerRecord(topic: String, key: String, value: String): ProducerRecord<String, String> =
     ProducerRecord(topic, null, key, value)
 
-
-// Create a profile for the first test
-class RetryTestProfile : QuarkusTestProfile {
-    override fun getConfigOverrides(): Map<String, String> {
-        return mapOf(
-            "mp.messaging.incoming.temperature-measurements.topic" to "temp-measurements-retry"
-        )
-    }
-}
-
-// Create a profile for the second test
-class RetryAsyncTestProfile : QuarkusTestProfile {
-    override fun getConfigOverrides(): Map<String, String> {
-        return mapOf(
-            "mp.messaging.incoming.temperature-measurements.topic" to "temp-measurements-retry-async"
-        )
-    }
-}

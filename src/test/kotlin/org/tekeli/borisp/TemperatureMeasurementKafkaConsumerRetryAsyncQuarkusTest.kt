@@ -1,7 +1,6 @@
 package org.tekeli.borisp
 
 import io.quarkus.test.junit.QuarkusTest
-import io.quarkus.test.junit.TestProfile
 import io.quarkus.test.junit.mockito.InjectSpy
 import jakarta.inject.Inject
 import org.apache.kafka.clients.producer.KafkaProducer
@@ -15,7 +14,6 @@ import org.mockito.Mockito.doThrow
 import org.mockito.kotlin.anyOrNull
 
 @QuarkusTest
-@TestProfile(RetryAsyncTestProfile::class)
 class TemperatureMeasurementKafkaConsumerRetryAsyncQuarkusTest {
     @Inject
     @ConfigProperty(name = "kafka.bootstrap.servers")
@@ -41,7 +39,8 @@ class TemperatureMeasurementKafkaConsumerRetryAsyncQuarkusTest {
 
     @Test
     fun `Async recovery when first measurement encounters a temporary exception, retry mechanism resolves it while second measurement processes independently`() {
-        val producerRecord =  givenProducerRecord(temperatureMeasurementsTopic, "Hamburg", givenTemperatureMeasurementAsJson())
+        val producerRecord =
+            givenProducerRecord(temperatureMeasurementsTopic, "Hamburg", givenTemperatureMeasurementAsJson())
         val otherProducerRecord =
             givenProducerRecord(temperatureMeasurementsTopic, "Kiel", givenOtherTemperatureMeasurementAsJson())
         doThrow(RuntimeException("Boom!!!"))

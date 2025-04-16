@@ -1,7 +1,6 @@
 package org.tekeli.borisp
 
 import io.quarkus.test.junit.QuarkusTest
-import io.quarkus.test.junit.TestProfile
 import io.quarkus.test.junit.mockito.InjectSpy
 import jakarta.inject.Inject
 import org.apache.kafka.clients.producer.KafkaProducer
@@ -15,7 +14,6 @@ import org.mockito.Mockito.doThrow
 import org.mockito.kotlin.anyOrNull
 
 @QuarkusTest
-@TestProfile(RetryTestProfile::class)
 class TemperatureMeasurementKafkaConsumerRetryQuarkusTest {
     @Inject
     @ConfigProperty(name = "kafka.bootstrap.servers")
