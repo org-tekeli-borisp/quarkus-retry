@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit
 @ApplicationScoped
 open class TemperatureMeasurementKafkaConsumer() {
     @Inject
-    private lateinit var temperatureMeasurementService: TemperatureMeasurementService
+    protected lateinit var temperatureMeasurementService: TemperatureMeasurementService
 
     @Incoming("temperature-measurements")
     @Retry(maxRetries = 3, delay = 1000L, delayUnit = ChronoUnit.MILLIS)
