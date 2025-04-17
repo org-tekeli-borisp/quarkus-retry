@@ -38,7 +38,7 @@ class TemperatureMeasurementKafkaConsumerRetryAsyncQuarkusTest {
     }
 
     @Test
-    fun `Async recovery when first measurement encounters a temporary exception, retry mechanism resolves it while second measurement processes independently`() {
+    fun `async recovery when a specific measurement encounters a temporary exception, retry mechanism resolves it while second measurement processes independently`() {
         val producerRecord =
             givenProducerRecord(temperatureMeasurementsTopic, "Berlin", givenTemperatureMeasurementAsJson("Berlin", 22.3))
         val otherProducerRecord =
